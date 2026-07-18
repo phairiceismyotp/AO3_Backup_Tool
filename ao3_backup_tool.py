@@ -152,7 +152,7 @@ def fetch_work_title(work_id: str) -> str | None:
         str | None: A sanitized filename string in the format "Title - Author",
             or None if the metadata cannot be retrieved.
     """
-    url = f"https://archiveofourown.org/works/{work_id}"
+    url = f"https://archiveofourown.org/works/{work_id}?view_adult=true"
     req = urllib.request.Request(url, headers=DEFAULT_HEADERS)
     
     try:
