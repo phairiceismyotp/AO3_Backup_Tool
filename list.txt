@@ -1,0 +1,35 @@
+# =============================================================================
+# AO3 Backup Tool - Input Work List
+# =============================================================================
+#
+# This file serves as the input manifest for ao3_backup_tool.py.
+# Populate this file with one entry per line using any of the accepted formats.
+#
+# Accepted Formats:
+# -----------------
+# 1. Bare Numeric Work ID:
+#    22402597
+#
+# 2. Full AO3 Work URL (Chapter URLs are permitted):
+#    https://archiveofourown.org/works/22402597
+#    https://archiveofourown.org/works/22402597/chapters/53523817
+#
+# 3. AO3 Direct Download URL:
+#    https://download.archiveofourown.org/downloads/22402597/fic.epub
+#
+# Extraction Logic:
+# -----------------
+# The tool isolates the numeric work ID from the input string and reconstructs
+# the download URL dynamically based on the format selected at runtime. File
+# extensions provided in input URLs (e.g., .epub) are ignored.
+#
+# Syntax Rules:
+# -------------
+# - Comments: Lines beginning with '#' are ignored.
+# - Whitespace: Blank lines are ignored.
+# - Deduplication: Duplicate work IDs are downloaded once per session. Existing
+#   files on disk are skipped to optimize network requests.
+#
+# =============================================================================
+
+# Provide the target work IDs or URLs below:
