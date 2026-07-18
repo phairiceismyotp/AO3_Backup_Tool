@@ -6,7 +6,7 @@ This project is unofficial and is not affiliated with Archive of Our Own or the 
 
 ## Video Tutorial
 
-[Watch the step-by-step usage guide on YouTube](https://www.youtube.com/watch?v=Tci2SUwRYu0)
+[Watch the step-by-step usage guide on YouTube](https://www.youtube.com/watch?v=XYoOpuPYPIo)
 
 *(Note: The video also includes a complete guide on how to download and install Python for Windows x64 directly from python.org).*
 
@@ -64,6 +64,17 @@ Finally, the tool forces a `DOWNLOAD_DELAY_SECONDS` cooldown before processing t
    - **macOS / Linux:** Run `python ao3_backup_tool.py` in your terminal.
 4. Select your desired output format from the interactive console menu (AZW3, EPUB, MOBI, PDF, HTML).
 5. Downloaded files will be automatically saved to the `works/` subdirectory.
+
+## Troubleshooting
+
+**Windows Defender SmartScreen / Smart App Control blocked the script?**
+
+When you download a `.zip` or `.bat` file from the internet, Windows tags it with a security flag ("Mark of the Web"). To fix this:
+1. **Before extracting**, right-click the downloaded `.zip` file.
+2. Select **Properties**.
+3. At the bottom of the *General* tab, check the **Unblock** box.
+4. Click **Apply**, then **OK**.
+5. Extract the `.zip` file. You can now double-click `run.bat` without being blocked.
 
 ## Configuration
 
