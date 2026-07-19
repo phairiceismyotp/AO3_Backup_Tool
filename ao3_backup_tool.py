@@ -18,12 +18,14 @@ Dependencies: Python 3.10+ standard library only (no third-party packages).
 """
 
 import http.client
+import os
 import re
 import sys
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from datetime import datetime
 from pathlib import Path
 
 # --- Configuration -----------------------------------------------------------
@@ -281,7 +283,7 @@ def read_list(path: Path) -> list[str]:
         sys.exit(1)
 
     entries = []
-    for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+    for line in path.read_text(encoding="utf-8-sig", errors="replace").splitlines():
         line = line.strip()
         if line and not line.startswith("#"):
             entries.append(line)
@@ -335,6 +337,26 @@ def process_single_work(work_id: str, fmt: str, out_dir: Path, task_num: int, to
     return False
 
 
+class DualLogger:
+    """
+    A stream wrapper that writes to both the original sys.stdout and a log file.
+    """
+    def __init__(self, filepath: Path):
+        self.terminal = sys.stdout
+        self.log_file = filepath.open("a", encoding="utf-8")
+
+    def write(self, message: str) -> None:
+        self.terminal.write(message)
+        self.log_file.write(message)
+
+    def flush(self) -> None:
+        self.terminal.flush()
+        self.log_file.flush()
+
+    def close(self) -> None:
+        self.log_file.close()
+
+
 def run() -> None:
     """
     Entry point for the main application loop.
@@ -342,12 +364,15 @@ def run() -> None:
     Initializes the output directory, reads entries, fetches metadata,
     and downloads files sequentially with configurable pauses.
     """
-    print_banner()
-
     base_dir = Path(__file__).parent
     list_path = base_dir / LIST_FILE
     out_dir = base_dir / OUTPUT_DIR
     out_dir.mkdir(exist_ok=True)
+    
+    log_dir = base_dir / "logs"
+    log_dir.mkdir(exist_ok=True)
+
+    print_banner()
 
     while True:
         fmt = choose_format()
@@ -356,13 +381,19 @@ def run() -> None:
             sys.exit(0)
 
         raw_entries = read_list(list_path)
-        print(f"  [i]   Found {len(raw_entries)} entr{'y' if len(raw_entries) == 1 else 'ies'} in {LIST_FILE}.\n")
-
         valid_count = sum(1 for e in raw_entries if extract_work_id(e))
 
         if valid_count == 0:
+            print(f"  [i]   Found {len(raw_entries)} entr{'y' if len(raw_entries) == 1 else 'ies'} in {LIST_FILE}.")
             print("  [!]   No recognizable work entries found. Please check list.txt.\n")
             continue
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        log_path = log_dir / f"session_{timestamp}.log"
+        logger = DualLogger(log_path)
+        sys.stdout = logger
+
+        print(f"  [i]   Found {len(raw_entries)} entr{'y' if len(raw_entries) == 1 else 'ies'} in {LIST_FILE}.\n")
 
         print(f"  [>]   Downloading {valid_count} work(s) to '{OUTPUT_DIR}/'.")
         print(f"        Pauses: {METADATA_DELAY_SECONDS}s after metadata, {DOWNLOAD_DELAY_SECONDS}s after download.\n")
@@ -397,7 +428,15 @@ def run() -> None:
         print(f"    Succeeded : {success_count}")
         if fail_count:
             print(f"    Failed    : {fail_count}")
-        print(f"    Output    : {out_dir.resolve()}\n")
+        print(f"    Output    : {out_dir.resolve()}")
+        print(f"    Log file  : {log_path.resolve()}\n")
+        
+        sys.stdout = logger.terminal
+        logger.close()
+        
+        input("  > Press Enter to return to main menu...")
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print_banner()
 
 
 if __name__ == "__main__":
