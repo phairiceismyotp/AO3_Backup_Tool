@@ -103,7 +103,7 @@ My deepest thanks also go to the friends and beta testers from the PhaiRice ship
 
 ## License & Notices
 
-**AO3 Backup Tool** is open-source software licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**. 
+**AO3 Backup Tool** is open-source software licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0-only)**. 
 
 - See `NOTICE.md` for copyright, fair use, and unofficial-project disclaimers.
 - See `PRIVACY.md` for our strict zero-telemetry privacy guarantee.
