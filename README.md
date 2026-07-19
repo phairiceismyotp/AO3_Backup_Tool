@@ -34,6 +34,7 @@ Screenshots use fictional demo data for display purposes only. They do not conta
 ## Features
 
 - **Batch Downloading:** Process hundreds of fanfictions automatically from a simple text list. The tool always downloads the **entire work**, even if you provide a URL pointing to a specific chapter.
+- **Continuous Mode & Logging:** Runs in an infinite loop, allowing multiple consecutive batch downloads. Automatically clears the screen between sessions and saves a detailed console log to the `logs/` directory.
 - **Smart Metadata Extraction:** Scrapes the work's HTML page to construct accurate, untruncated `Title - Author` filenames instead of relying on default server naming conventions.
 - **DDoS Protection & Cloudflare Bypass:** Implements strict, configurable inter-request delays and HTTP header spoofing to ensure your IP address remains unflagged.
 - **Intelligent Deduplication:** Scans the output directory before downloading. Existing files are skipped to save bandwidth, while maintaining pacing delays to mimic human browsing behavior.
